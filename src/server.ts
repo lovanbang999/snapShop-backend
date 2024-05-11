@@ -1,8 +1,14 @@
 import express, { Request, Response } from 'express'
+import config from './configs/environments'
+import instanceMongoDB from './configs/mongodb'
 
 const app = express()
 
-const PORT = process.env.PORT || 5000
+const PORT = config.app.PORT || 5000
+
+
+// Init database
+instanceMongoDB
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello, TypeScript Express!')

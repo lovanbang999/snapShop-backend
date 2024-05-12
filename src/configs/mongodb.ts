@@ -3,7 +3,6 @@ import mongoose from 'mongoose'
 import config from '../configs/environments'
 
 const { db: { connectString } } = config
-console.log('ConnectString:: ', connectString)
 
 class DataBase {
   static instance: DataBase
@@ -11,19 +10,28 @@ class DataBase {
   constructor() {
     this.connect()
   }
-  
+
   // Connect
-  connect(type: string = 'mongodb'): any {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  connect(type = 'mongodb') { // eslint-disable-line no-unused-vars
+    if (!connectString || typeof connectString !== 'string')
+      throw new Error('Database connection string is not properly configured.')
+
     mongoose.connect(connectString, { maxPoolSize: 50 })
       .then(() => {
+        // eslint-disable-next-line no-console
         console.log('Connect mongodb successfully!')
       })
-      .catch(err => console.log('Connect mongdb error!', err))
+      .catch((err : unknown) => {
+        // eslint-disable-next-line no-console
+        console.log('Connect mongdb error!', err)
+      })
   }
 
   static getInstance() {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!DataBase.instance) DataBase.instance = new DataBase()
-    
+
     return DataBase
   }
 }

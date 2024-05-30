@@ -6,5 +6,6 @@ import express from 'express'
 const accessRoutes = express.Router()
 
 accessRoutes.post('/register', accessValidation.signUp, asyncHandler(accessController.signUp))
+accessRoutes.post('/login', accessValidation.logIn, asyncHandler(accessController.logIn))
 
 export default accessRoutes

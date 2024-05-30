@@ -2,7 +2,7 @@ import { Response } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 
 interface ParamsSuccess {
-  message: string;
+  message?: string;
   status?: number;
   reasonStatusCode?: string;
   metaData?: object;
@@ -16,20 +16,20 @@ class SuccessResponse {
   metaData?: object
 
   constructor({ message, status = StatusCodes.OK, reasonStatusCode = ReasonPhrases.OK, metaData = {} }: ParamsSuccess) {
-    this.message = message || reasonStatusCode,
+    this.message = message ?? reasonStatusCode,
     this.status = status,
     this.reasonStatusCode = reasonStatusCode,
     this.metaData = metaData
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  send(res: Response, header = {}) { // eslint-disable-line no-unused-vars
+  send(res: Response, header = {}) {
     return res.status(this.status).json(this)
   }
 }
 
 export class Ok extends SuccessResponse {
-  constructor({ message, metaData = {} }: { message: string, metaData: object }) {
+  constructor({ message, metaData = {} }: { message?: string, metaData: object }) {
     super({ message, metaData })
   }
 }

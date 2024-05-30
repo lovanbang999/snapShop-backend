@@ -13,7 +13,7 @@ class DataBase {
 
   // Connect
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  connect(type = 'mongodb') { // eslint-disable-line no-unused-vars
+  connect(type = 'mongodb') {
     if (!connectString || typeof connectString !== 'string')
       throw new Error('Database connection string is not properly configured.')
 

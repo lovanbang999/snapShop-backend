@@ -18,7 +18,7 @@ interface Config {
 const dev: Config = {
   app: {
     port: parseInt(process.env.DEV_APP_PORT ?? '5000', 10),
-    buildMode: process.env.BULID_MODE
+    buildMode: process.env.BUILD_MODE
   },
   db: {
     connectString: process.env.DEV_DB_CONNECT_STRING,
@@ -29,7 +29,7 @@ const dev: Config = {
 const product: Config = {
   app: {
     port: parseInt(process.env.DEV_APP_PORT ?? '5000', 10),
-    buildMode: process.env.BULID_MODE
+    buildMode: process.env.BUILD_MODE
   },
   db: {
     connectString: process.env.PRODUCT_DB_CONNECT_STRING,

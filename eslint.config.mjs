@@ -22,6 +22,7 @@ export default tseslint.config(
       // Common
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-extraneous-class': 'off',
       'no-useless-catch': 0,
       'no-console': 1,
       'no-extra-boolean-cast': 0,

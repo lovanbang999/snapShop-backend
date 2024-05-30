@@ -1,8 +1,8 @@
-import { Response } from 'express'
+import { NextFunction, Response, Request } from 'express'
 import config from '../configs/environments'
 
-
-const errorHandling = (err: any, res: Response) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const errorHandling = (err: any, req: Request, res: Response, next: NextFunction) => { // eslint-disable-line no-unused-vars
   const statusCode: number = err.status || 500
 
   const responseError = {

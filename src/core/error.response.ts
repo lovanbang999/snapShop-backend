@@ -12,7 +12,7 @@ export class ErrorResponse extends Error {
 
 // ConflictRequestError
 export class ConflictRequestError extends ErrorResponse {
-  constructor(message = ReasonPhrases.CONFLICT, status = StatusCodes.CONFLICT) {
+  constructor(message: string = ReasonPhrases.CONFLICT, status: number = StatusCodes.CONFLICT) {
     super(message, status)
   }
 }
@@ -26,21 +26,27 @@ export class BadRequestError extends ErrorResponse {
 
 // AuthFailureError
 export class AuthFailureError extends ErrorResponse {
-  constructor(message = ReasonPhrases.UNAUTHORIZED, status = StatusCodes.UNAUTHORIZED) {
+  constructor(message: string = ReasonPhrases.UNAUTHORIZED, status: number = StatusCodes.UNAUTHORIZED) {
     super(message, status)
   }
 }
 
 // NotFoundError
 export class NotFoundError extends ErrorResponse {
-  constructor(message = ReasonPhrases.NOT_FOUND, status = StatusCodes.NOT_FOUND) {
+  constructor(message: string = ReasonPhrases.NOT_FOUND, status: number = StatusCodes.NOT_FOUND) {
     super(message, status)
   }
 }
 
 // ForbiddenError
 export class ForbiddenError extends ErrorResponse {
-  constructor(message = ReasonPhrases.FORBIDDEN, status = StatusCodes.FORBIDDEN) {
+  constructor(message: string = ReasonPhrases.FORBIDDEN, status: number = StatusCodes.FORBIDDEN) {
+    super(message, status)
+  }
+}
+
+export class InternalServerError extends ErrorResponse {
+  constructor(message: string = ReasonPhrases.INTERNAL_SERVER_ERROR, status: number = StatusCodes.INTERNAL_SERVER_ERROR) {
     super(message, status)
   }
 }

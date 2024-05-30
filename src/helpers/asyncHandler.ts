@@ -5,9 +5,8 @@ type AsyncHandlerFunc = (req: Request, res: Response, next: NextFunction) => Pro
 const asyncHandler = (fn: AsyncHandlerFunc) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     fn(req, res, next)
-      .catch(next)
+      .catch((error: unknown) => { next(error) })
   }
-
 }
 
 export default asyncHandler

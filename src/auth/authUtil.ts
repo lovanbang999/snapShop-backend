@@ -1,3 +1,4 @@
+import crypto from 'crypto'
 import JWT from 'jsonwebtoken'
 
 export const createTokenPair = (payload: string | object | Buffer, publicKey: string, privateKey: string) => {
@@ -10,4 +11,11 @@ export const createTokenPair = (payload: string | object | Buffer, publicKey: st
   })
 
   return { accessToken, refreshToken }
+}
+
+export const generatePubAndPrivKey = () => {
+  const privateKey: string = crypto.randomBytes(64).toString('hex')
+  const publicKey: string = crypto.randomBytes(64).toString('hex')
+
+  return { publicKey, privateKey }
 }

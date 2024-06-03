@@ -23,6 +23,7 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-extraneous-class': 'off',
+      '@typescript-eslint/prefer-optional-chain': 'off',
       'no-useless-catch': 0,
       'no-console': 1,
       'no-extra-boolean-cast': 0,

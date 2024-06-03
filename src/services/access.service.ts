@@ -1,11 +1,13 @@
 import bcrypt from 'bcrypt'
-import crypto from 'crypto'
-import { AuthFailureError, BadRequestError } from '@/core/error.response'
+import { AuthFailureError, BadRequestError, ForbiddenError, InternalServerError } from '@/core/error.response'
 import userModel from '@/models/user.model'
 import { ROLES_USER } from '@/constants'
-import { createTokenPair } from '@/auth/authUtil'
+import { createTokenPair, generatePubAndPrivKey } from '@/auth/authUtil'
 import KeyTokenService from './keyToken.service'
 import { getInfoData } from '@/utils'
+import keyTokenModel from '@/models/keyToken.model'
+import { UserProps } from '@/interfaces/customRequest'
+import { KeyTokenProps } from '@/interfaces/keyToken'
 
 export interface SignUpBodyProps {
   username: string;
@@ -41,18 +43,18 @@ class AccessService {
     const createdUser = await userModel.create({ username, email, password: hashedPassword, roles: [ROLES_USER.USER] })
 
     // Generate publich and private key
-    const privateKey = crypto.randomBytes(64).toString('hex')
-    const publicKey = crypto.randomBytes(64).toString('hex')
+    const { publicKey, privateKey } = generatePubAndPrivKey()
 
     // Create token pair (AT and RT)
-    const { accessToken, refreshToken } = createTokenPair({ username, email }, publicKey, privateKey)
+    const { accessToken, refreshToken } = createTokenPair({ userId: createdUser._id, email }, publicKey, privateKey)
 
     // Save the newly created toeken into keyTokenModel
     await KeyTokenService.createKeyToken({
       userId: createdUser._id,
       publicKey,
       privateKey,
-      refreshToken
+      refreshToken,
+      refreshTokensUsed: []
     })
 
     // Return data to client
@@ -79,11 +81,10 @@ class AccessService {
     if (!matchPassword) throw new AuthFailureError('There was an authentication error!')
 
     // Create public and private Key
-    const privateKey: string = crypto.randomBytes(64).toString('hex')
-    const publicKey: string = crypto.randomBytes(64).toString('hex')
+    const { publicKey, privateKey } = generatePubAndPrivKey()
 
     // Generate token pair
-    const { accessToken, refreshToken }: { accessToken: string, refreshToken: string } = createTokenPair({ _id, email }, publicKey, privateKey)
+    const { accessToken, refreshToken }: { accessToken: string, refreshToken: string } = createTokenPair({ userId: _id, email }, publicKey, privateKey)
 
     // Save the newly token created token into keyTonkenModel
     await KeyTokenService.createKeyToken({
@@ -103,6 +104,46 @@ class AccessService {
     }
   }
 
+  static handleRefreshToken = async ({
+    refreshToken,
+    user,
+    keyStore
+  }: { refreshToken?: string, user?: UserProps, keyStore?: KeyTokenProps }) => {
+
+    if (!user) throw new InternalServerError('An error occurred!')
+    const { userId, email } = user
+
+    if (!refreshToken) throw new InternalServerError('An error occurred!')
+    if (keyStore?.refreshTokensUsed.includes(refreshToken)) {
+      await keyTokenModel.deleteOne({ userId })
+      throw new ForbiddenError('Something wrong happend! Please relogin')
+    }
+
+    if (keyStore?.refreshToken !== refreshToken) throw new AuthFailureError('User is not registered!')
+
+    const hasUser = await userModel.findOne({ email }).lean()
+    if (!hasUser) throw new AuthFailureError('User is not registered!')
+
+    const { publicKey, privateKey } = generatePubAndPrivKey()
+
+    const tokens = createTokenPair({ userId, email }, publicKey, privateKey)
+
+    await keyStore.updateOne({
+      $set: {
+        publicKey,
+        privateKey,
+        refreshToken: tokens.refreshToken
+      },
+      $push: {
+        refreshTokensUsed: refreshToken // // Used to receive new tokens
+      }
+    })
+
+    return {
+      user,
+      tokens
+    }
+  }
 }
 
 export default AccessService

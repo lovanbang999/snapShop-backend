@@ -15,7 +15,7 @@ app.use(express.json())
 instanceMongoDB
 
 // Init routes
-app.use('/', Routes)
+app.use('/v1/api/', Routes)
 
 // Handling error
 app.use((req: Request, res: Response, next: NextFunction ) => {

@@ -5,9 +5,9 @@ interface RoleUser {
 }
 
 export const ROLES_USER: RoleUser = {
-  USER: '00000',
-  SHOP: '11111',
-  ADMIN: '33333'
+  USER: 'e8rwjXto0cBEP0jLlCevSoEhpnx4JDQmjVLCEm/CREQ',
+  SHOP: 'DwJp3Fq9mDcULhDi9wKlW1IbBl739QjnoWtGPstpzMI',
+  ADMIN: 'sAX/T3Ni917vNiPe5v08Ct22GIiw4sgVG/7D4uhd/J4'
 }
 
 export const OBJECT_ID_RULE = /^[0-9a-fA-F]{24}$/

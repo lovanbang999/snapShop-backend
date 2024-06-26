@@ -1,14 +1,22 @@
+import cors from 'cors'
 import express, { NextFunction, Request, Response } from 'express'
 import config from './configs/environments'
 import instanceMongoDB from './configs/mongodb'
 import { ErrorResponse } from './core/error.response'
 import errorHandling from './middlewares/errorHandling.middleware'
 import Routes from './routers/index'
+import { corsOptions } from './configs/cors'
+
 
 const app = express()
 
 const PORT : number = config.app.port || 5000
 
+// Handle Cors
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+app.use(cors(corsOptions))
+
+// Enable req.body json data
 app.use(express.json())
 
 // Init database

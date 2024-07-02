@@ -6,8 +6,9 @@ import { createTokenPair, generatePubAndPrivKey } from '@/auth/authUtil'
 import KeyTokenService from './keyToken.service'
 import { getInfoData } from '@/utils'
 import keyTokenModel from '@/models/keyToken.model'
-import { UserProps } from '@/interfaces/customRequest'
 import { KeyTokenProps } from '@/interfaces/keyToken'
+import { UserProps } from '@/interfaces/customRequest'
+import { LoginResponseType } from '@/interfaces/access.interface'
 
 export interface SignUpBodyProps {
   username: string;
@@ -19,6 +20,18 @@ export interface SignUpBodyProps {
 export interface LoginBodyProps {
   username: string;
   password: string;
+}
+
+type SignupResponseType = {
+  user: {
+      _id: string;
+      username: string;
+      email: string;
+  };
+  tokens: {
+      accessToken: string;
+      refreshToken: string;
+  };
 }
 
 class AccessService {
@@ -96,7 +109,7 @@ class AccessService {
 
     // Return data to the client
     return {
-      user: getInfoData({ fields: ['_id', 'username'], object: hasUser }),
+      user: getInfoData({ fields: ['_id', 'username', 'email'], object: hasUser }),
       tokens: {
         accessToken,
         refreshToken

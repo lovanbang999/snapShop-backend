@@ -28,7 +28,7 @@ const dev: Config = {
 
 const product: Config = {
   app: {
-    port: parseInt(process.env.DEV_APP_PORT ?? '5000', 10),
+    port: parseInt(process.env.PRODUCT_APP_PORT ?? '5000', 10),
     buildMode: process.env.BUILD_MODE
   },
   db: {

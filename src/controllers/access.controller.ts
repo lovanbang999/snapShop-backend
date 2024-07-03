@@ -37,6 +37,16 @@ class AccessController {
       })
     }).send(res)
   }
+
+  logout = async (req: CusTomRequest, res: Response): Promise<void> => {
+    new Ok({
+      message: 'Logout successfully!',
+      metaData: await AccessService.logout({
+        user: req.user,
+        keyStore: req.keyStore
+      })
+    }).send(res)
+  }
 }
 
 export default new AccessController()

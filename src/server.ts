@@ -13,7 +13,7 @@ const app = express()
 const PORT : number = config.app.port || 5000
 
 // Handle Cors
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+
 app.use(cors(corsOptions))
 
 // Enable req.body json data

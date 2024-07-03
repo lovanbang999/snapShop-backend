@@ -40,7 +40,7 @@ export const authentication = asyncHandler( async (req: CusTomRequest, res: Resp
 
   // Check if req.headers has refreshtoken?
   if (req.headers[HEADER.REFRESHTOKEN]) {
-    const refreshToken = req.headers[HEADER.REFRESHTOKEN] as string
+    const refreshToken = (req.headers[HEADER.REFRESHTOKEN] as string).split(' ')[1]
 
     if (refreshTokensUsed.includes(refreshToken)) {
       await keyTokenModel.deleteOne({ userId })
@@ -58,7 +58,7 @@ export const authentication = asyncHandler( async (req: CusTomRequest, res: Resp
     return
   }
 
-  const accessToken = req.headers[HEADER.AUTHORIZATION] as string
+  const accessToken = (req.headers[HEADER.AUTHORIZATION] as string).split(' ')[1]
   if (!accessToken) throw new AuthFailureError('Authentication failed!')
 
   const decodeUser = jwtVerification(accessToken, publicKey) as UserProps

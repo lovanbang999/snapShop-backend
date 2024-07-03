@@ -1,9 +1,8 @@
 import { Request } from 'express'
 import { KeyTokenProps } from './keyToken'
-import { Types } from 'mongoose'
 
 export interface UserProps {
-  userId: Types.ObjectId;
+  userId: string;
   email: string;
 }
 

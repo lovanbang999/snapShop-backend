@@ -1,4 +1,4 @@
-import { Document } from 'mongoose'
+import { Document, Schema } from 'mongoose'
 
 export interface CreateKeyTokenProps {
   userId: unknown;
@@ -9,7 +9,7 @@ export interface CreateKeyTokenProps {
 }
 
 export interface KeyTokenProps extends Document {
-  userId: unknown;
+  userId: Schema.Types.ObjectId;
   publicKey: string;
   privateKey: string;
   refreshToken: string;

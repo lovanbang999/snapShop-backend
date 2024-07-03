@@ -1,4 +1,4 @@
-export type SignupResponseType = {
+export interface SignupResponseType {
     message: string;
     status: number;
     reasonStatusCode: string;

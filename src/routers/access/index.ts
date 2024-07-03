@@ -12,5 +12,6 @@ accessRoutes.post('/login', accessValidation.logIn, asyncHandler(accessControlle
 accessRoutes.use(authentication)
 
 accessRoutes.post('/handlerrefreshtoken', asyncHandler(accessController.handleRefreshToken))
+accessRoutes.post('/logout', asyncHandler(accessController.logout))
 
 export default accessRoutes

@@ -8,7 +8,6 @@ import { getInfoData } from '@/utils'
 import keyTokenModel from '@/models/keyToken.model'
 import { KeyTokenProps } from '@/interfaces/keyToken'
 import { UserProps } from '@/interfaces/customRequest'
-import { LoginResponseType } from '@/interfaces/access.interface'
 
 export interface SignUpBodyProps {
   username: string;
@@ -22,16 +21,9 @@ export interface LoginBodyProps {
   password: string;
 }
 
-type SignupResponseType = {
-  user: {
-      _id: string;
-      username: string;
-      email: string;
-  };
-  tokens: {
-      accessToken: string;
-      refreshToken: string;
-  };
+interface DeleteResult {
+  acknowledged: boolean;
+  deletedCount: number;
 }
 
 class AccessService {
@@ -156,6 +148,16 @@ class AccessService {
       user,
       tokens
     }
+  }
+
+  static logout = async ({ user, keyStore }: { user?: UserProps, keyStore?: KeyTokenProps }) => {
+
+    if (user?.userId !== keyStore?.userId.toString()) throw new AuthFailureError('There was an authentication error!')
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const message: DeleteResult = await keyStore?.deleteOne()
+
+    return { deletecount: message.deletedCount }
   }
 }
 

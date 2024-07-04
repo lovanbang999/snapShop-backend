@@ -1,4 +1,4 @@
-import { AuthFailureError, BadRequestError, ForbiddenError, NotFoundError } from '@/core/error.response'
+import { AuthFailureError, ForbiddenError } from '@/core/error.response'
 import asyncHandler from '@/helpers/asyncHandler'
 import KeyTokenService from '@/services/keyToken.service'
 import { jwtVerification } from '@/utils'
@@ -30,12 +30,12 @@ export const authentication = asyncHandler( async (req: CusTomRequest, res: Resp
   if (!userId) throw new AuthFailureError('Invalid request!')
 
   const foundUser = await userModel.findById(userId)
-  if (!foundUser) throw new BadRequestError('An error occurred! Please try again.')
+  if (!foundUser) throw new AuthFailureError('An error occurred! Please try again.')
 
   // Check if keytoken exists?
   const keyStore: KeyTokenProps | null = await KeyTokenService.findByUserId(userId)
 
-  if (!keyStore) throw new NotFoundError('Not found keyStore!')
+  if (!keyStore) throw new AuthFailureError('Something wrong happend! Please relogin')
   const { publicKey, privateKey, refreshTokensUsed } = keyStore
 
   // Check if req.headers has refreshtoken?
@@ -44,11 +44,11 @@ export const authentication = asyncHandler( async (req: CusTomRequest, res: Resp
 
     if (refreshTokensUsed.includes(refreshToken)) {
       await keyTokenModel.deleteOne({ userId })
-      throw new ForbiddenError('Something wrong happend! Please relogin')
+      throw new AuthFailureError('Something wrong happend! Please relogin')
     }
 
     const decodeUser = jwtVerification(refreshToken, privateKey) as UserProps
-    if (decodeUser.userId as unknown !== userId) throw new AuthFailureError('An error occurred during authentication!')
+    if (decodeUser.userId as unknown !== userId) throw new AuthFailureError('Something wrong happend! Please relogin')
 
     req.keyStore = keyStore
     req.user = decodeUser
@@ -59,7 +59,7 @@ export const authentication = asyncHandler( async (req: CusTomRequest, res: Resp
   }
 
   const accessToken = (req.headers[HEADER.AUTHORIZATION] as string).split(' ')[1]
-  if (!accessToken) throw new AuthFailureError('Authentication failed!')
+  if (!accessToken) throw new AuthFailureError('Something wrong happend! Please relogin')
 
   const decodeUser = jwtVerification(accessToken, publicKey) as UserProps
   if (decodeUser.userId as unknown !== userId) throw new AuthFailureError('An error occurred during authentication!')

@@ -8,7 +8,7 @@ export const corsOptions: cors.CorsOptions = {
     if (WHITELIST_DOMAIN.includes(origin as never)) callback(null, true)
   },
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-rtoken-id', 'x-client-id', 'x-api-key'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
   credentials: true
 }

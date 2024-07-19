@@ -7,13 +7,11 @@ import errorHandling from './middlewares/errorHandling.middleware'
 import Routes from './routers/index'
 import { corsOptions } from './configs/cors'
 
-
 const app = express()
 
 const PORT : number = config.app.port || 5000
 
 // Handle Cors
-
 app.use(cors(corsOptions))
 
 // Enable req.body json data

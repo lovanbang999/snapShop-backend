@@ -10,9 +10,16 @@ interface DBConfig {
   name?: string;
 }
 
+interface CloudinaryConfig {
+  cloudName?: string;
+  apiKey?: string;
+  apiSecret?: string;
+}
+
 interface Config {
   app: AppConfig;
   db: DBConfig;
+  cloudinary: CloudinaryConfig;
 }
 
 const dev: Config = {
@@ -23,6 +30,11 @@ const dev: Config = {
   db: {
     connectString: process.env.DEV_DB_CONNECT_STRING,
     name: process.env.DEV_DB_NAME
+  },
+  cloudinary: {
+    cloudName: process.env.DEV_CLOUDINARY_NAME,
+    apiKey: process.env.DEV_CLOUDINARY_API_KEY,
+    apiSecret: process.env.DEV_CLOUDINARY_API_SECRET
   }
 }
 
@@ -34,6 +46,11 @@ const product: Config = {
   db: {
     connectString: process.env.PRODUCT_DB_CONNECT_STRING,
     name: process.env.PRODUCT_DB_NAME
+  },
+  cloudinary: {
+    cloudName: process.env.PRODUCT_CLOUDINARY_NAME,
+    apiKey: process.env.PRODUCT_CLOUDINARY_API_KEY,
+    apiSecret: process.env.PRODUCT_CLOUDINARY_API_SECRET
   }
 }
 

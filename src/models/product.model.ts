@@ -1,34 +1,58 @@
 import { Schema, model } from 'mongoose'
-import { ClothesProps, ElectronicProps, FurnitureProps, ProductProps } from '@/interfaces/product'
+import { ImageType } from '@/interfaces/product'
 import slugify from 'slugify'
 
 const DOCUMENT_NAME = 'product'
 const COLLECTION_NAME = 'products'
 
+const imageSchema = new Schema<ImageType>({
+  url: { type: String, required: true },
+  publicId: { type: String, required: true }
+}, {
+  _id: false
+})
+
+const actualClassificationSchema = new Schema({
+  sku: { type: String, required: true },
+  skucode: { type: String, default: null },
+  size: { type: String, default: null },
+  color: { type: String, default: null },
+  image: imageSchema,
+  barcode: { type: String, default: null },
+  normalGoodsInventory: { type: Number, required: true },
+  faultyGoodsInventory: { type: Number, default: null },
+  saftyInventory: { type: Number, default: null },
+  initialEntryPrice: { type: Number, default: null },
+  originalSellingPrice: { type: Number, default: null }
+}, {
+  _id: false
+})
+
+
 // Declare the Schema of the product model
-const productSchema = new Schema<ProductProps>({
+const productSchema = new Schema({
   name: { type: String, required: true },
-  thumb: { type: String, required: true },
+  thumb: imageSchema,
+  images: [imageSchema],
+  convertionChartImage: imageSchema,
+  weight: Number,
   description: String,
-  slug: String,
-  price: { type: Number, required: true },
-  quantity: { type: Number, required: true },
-  type: {
+  category: {
     type: String,
     required: true,
-    enum: ['Electronic', 'Clothes', 'Furniture']
+    enum: ['electronic', 'clothes', 'furniture']
   },
   shopId: { type: Schema.Types.ObjectId, ref: 'shop' },
-  attributes: { type: Schema.Types.Mixed, required: true },
+  actualClassification: [actualClassificationSchema],
   // More
   ratingsAverge: {
     type: Number,
-    default: 4,
+    default: 5,
     min: [1, 'Rating must be above 1.0'],
     max: [5, 'Rating must be below 5.0'],
     set: (value: number) => Math.round(value * 10) / 10
   },
-  variation: { type: Array, default: [] },
+  slug: String,
   isDraft: { type: Boolean, default: true, index: true, select: false },
   isPublish: { type: Boolean, default: false, index: true, select: false }
 }, {
@@ -42,40 +66,4 @@ productSchema.pre('save', function(next) {
   next()
 })
 
-// Declare the Schema of the product has type [electronic]
-const electronicSchema = new Schema<ElectronicProps>({
-  manufacturer: { type: String, required: true },
-  deviceModel: String,
-  color: String,
-  shopId: { type: Schema.Types.ObjectId, ref: 'shop', required: true }
-}, {
-  timestamps: true,
-  collection: 'electronics'
-})
-
-// Declare the Schema of the product has type [Clothing]
-const clothesSchema = new Schema<ClothesProps>({
-  brand: { type: String, required: true },
-  size: String,
-  materia: String,
-  shopId: { type: Schema.Types.ObjectId, ref: 'shop', required: true }
-}, {
-  timestamps: true,
-  collection: 'clothes'
-})
-
-// Declare the Schema of the product has type [Furniture]
-const furnitureSchema = new Schema<FurnitureProps>({
-  brand: { type: String, required: true },
-  type: String,
-  material: String,
-  shopId: { type: Schema.Types.ObjectId, ref: 'shop', required: true }
-}, {
-  timestamps: true,
-  collection: 'furnitures'
-})
-
-export const product = model(DOCUMENT_NAME, productSchema)
-export const electronic = model('electronic', electronicSchema)
-export const clothes = model('clothes', clothesSchema)
-export const furniture = model('furniture', furnitureSchema)
+export default model(DOCUMENT_NAME, productSchema)

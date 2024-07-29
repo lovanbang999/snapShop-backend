@@ -1,15 +1,19 @@
-import ProductFactory from '@/services/product.service'
 import { Ok } from '@/core/success.response'
 import { Response } from 'express'
 import { CusTomRequest } from '@/interfaces/customRequest'
-import { ProductProps } from '@/interfaces/product'
+import { CreateProductType, CreateProductV1Type } from '@/interfaces/product'
+import ProductService from '@/services/product.service'
+
+interface CreateProductRequestType extends CusTomRequest {
+  body: CreateProductType
+}
 
 class ProductController {
-  createProduct = async (req: CusTomRequest, res: Response) => {
+  createProduct = async (req: CreateProductRequestType, res: Response) => {
+    const data = { ...req.body, shopId: req.user?.userId } as CreateProductV1Type
     new Ok({
       message: 'Create new product successfully!',
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      metaData: await ProductFactory.createProduct(req.body?.type as string, { ...req.body, shopId: req.user?.userId } as ProductProps)
+      metaData: await ProductService.createProduct(data)
     }).send(res)
   }
 }

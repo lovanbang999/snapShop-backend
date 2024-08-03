@@ -2,6 +2,16 @@ import JWT from 'jsonwebtoken'
 import { AuthFailureError } from '@/core/error.response'
 import _ from 'lodash'
 import { Types } from 'mongoose'
+import { whiteSpacePattern } from '@/constants'
+
+export const getEnvVar = (name: string): string => {
+  const value = process.env[name]
+  if (!value) {
+    throw new Error(`Environment variable ${name} is not defined!`)
+  }
+
+  return value
+}
 
 export const convertToObjectIdMongodb = (id: string): Types.ObjectId => new Types.ObjectId(id)
 
@@ -23,3 +33,5 @@ export const jwtVerification = (token: string, key: string): string | JWT.JwtPay
     }
   }
 }
+
+export const convertDisplaynameToUsername = (displayname: string) => displayname.normalize().toLowerCase().replace(whiteSpacePattern, '')

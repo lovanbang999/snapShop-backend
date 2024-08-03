@@ -11,6 +11,10 @@ interface LogInRequest extends Request {
   body: LoginBodyProps;
 }
 
+interface ExchangeRequest extends Request {
+  body: { code: string }
+}
+
 class AccessController {
   signUp = async (req: SignUpRequest, res: Response): Promise<void> => {
     new Created({
@@ -20,10 +24,17 @@ class AccessController {
     }).send(res)
   }
 
-  logIn = async(req: LogInRequest, res: Response): Promise<void> => {
+  logIn = async (req: LogInRequest, res: Response): Promise<void> => {
     new Ok({
       message: 'Login successfully!',
       metaData: await AccessService.logIn(req.body)
+    }).send(res)
+  }
+
+  exchange = async (req: ExchangeRequest, res: Response): Promise<void> => {
+    new Ok({
+      message: 'Login successfully!',
+      metaData: await AccessService.exchange({ code: req.body.code })
     }).send(res)
   }
 

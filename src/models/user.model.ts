@@ -1,15 +1,31 @@
 import { ROLES_USER } from '@/constants'
-import { Schema, model } from 'mongoose'
+import { Document, Schema, model } from 'mongoose'
+
+export interface UserType extends Document {
+  username?: string;
+  email: string;
+  password?: string;
+  avata?: string;
+  googleId?: string;
+  isActive: boolean;
+  roles: string[];
+}
 
 const DOCUMENT_NAME = 'user'
 const COLLECTION_NAME = 'users'
 
-const userModel: Schema = new Schema({
-  username: { type: String, unique: true, required: true },
-  email: { type: String, required: true },
-  password: { type: String, required: true },
+const userModel = new Schema<UserType>({
+  username: { type: String, unique: true, trim: true, parse: true },
+  email: { type: String, unique: true, trim: true, required: true },
+  password: {
+    type: String,
+    parse: false,
+    minlength: 6
+  },
+  avata: { type: String, default: null },
+  googleId: { type: String, unique: true, sparse: true },
   isActive: { type: Boolean, default: false },
-  roles: { type: Array, default: [ROLES_USER.USER] }
+  roles: { type: [String], default: [ROLES_USER.USER] }
 }, {
   timestamps: true,
   collection: COLLECTION_NAME

@@ -15,3 +15,5 @@ export const OBJECT_ID_RULE_MESSAGE = 'Your string fails to match the Object Id 
 
 export const EMAIL_RULE = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/
 export const EMAIL_RULE_MESSAGE = 'Your email fails to match the email pattern!'
+
+export const whiteSpacePattern = /\s+/g

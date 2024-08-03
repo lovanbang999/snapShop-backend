@@ -6,16 +6,23 @@ import { ErrorResponse } from './core/error.response'
 import errorHandling from './middlewares/errorHandling.middleware'
 import Routes from './routers/index'
 import { corsOptions } from './configs/cors'
+import passport from 'passport'
+import { googleAuth } from './configs/passport.oauth'
 
 const app = express()
 
-const PORT : number = config.app.port || 5000
+const PORT: number = config.app.port || 5000
+const HOST: string = config.app.host
 
 // Handle Cors
 app.use(cors(corsOptions))
 
 // Enable req.body json data
 app.use(express.json())
+
+// Init middleware
+app.use(passport.initialize())
+passport.use(googleAuth)
 
 // Init database
 instanceMongoDB
@@ -33,5 +40,5 @@ app.use(errorHandling)
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(`Server is running on http://localhost:${PORT.toString()}`)
+  console.log(`Server is running on ${HOST}:${PORT.toString()}`)
 })

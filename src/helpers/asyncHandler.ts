@@ -1,11 +1,10 @@
-import { CusTomRequest } from '@/interfaces/customRequest'
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction, RequestHandler } from 'express'
 
-type AsyncHandlerFunc = (req: Request | CusTomRequest, res: Response, next: NextFunction) => Promise<void>
+type AsyncHandlerFunc<T extends Request = Request> = (req: T, res: Response, next: NextFunction) => Promise<void>
 
-const asyncHandler = (fn: AsyncHandlerFunc) => {
-  return (req: Request | CusTomRequest, res: Response, next: NextFunction): void => {
-    fn(req, res, next)
+const asyncHandler = <T extends Request = Request>(fn: AsyncHandlerFunc<T>): RequestHandler => {
+  return (req, res, next) => {
+    fn(req as T, res, next)
       .catch((error: unknown) => { next(error) })
   }
 }

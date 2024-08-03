@@ -8,6 +8,7 @@ import { getInfoData } from '@/utils'
 import keyTokenModel from '@/models/keyToken.model'
 import { KeyTokenProps } from '@/interfaces/keyToken'
 import { UserProps } from '@/interfaces/customRequest'
+import codeModel from '@/models/code.model'
 
 export interface SignUpBodyProps {
   username: string;
@@ -81,8 +82,10 @@ class AccessService {
 
     const { password: passwordOfUser, _id, email } = hasUser
 
+    if (!passwordOfUser) throw new BadRequestError('User does not exist!')
+
     // Check if the password from client matches the password in the bds
-    const matchPassword: boolean = bcrypt.compareSync(password, passwordOfUser as string)
+    const matchPassword: boolean = bcrypt.compareSync(password, passwordOfUser)
     if (!matchPassword) throw new AuthFailureError('There was an authentication error!')
 
     // Create public and private Key
@@ -102,6 +105,40 @@ class AccessService {
     // Return data to the client
     return {
       user: getInfoData({ fields: ['_id', 'username', 'email'], object: hasUser }),
+      tokens: {
+        accessToken,
+        refreshToken
+      }
+    }
+  }
+
+  static exchange = async ({ code }: { code: string }) => {
+    const tempCode = await codeModel.findOne({ code })
+    if (!tempCode) throw new AuthFailureError('There was an authentication error!')
+
+    const user = await userModel.findById(tempCode.userId)
+    if (!user) throw new BadRequestError('User not found!')
+
+    // Detele the temporary code
+    await tempCode.deleteOne({ _id: tempCode._id })
+
+    // Create public and private Key
+    const { publicKey, privateKey } = generatePubAndPrivKey()
+
+    // Generate token pair
+    const { accessToken, refreshToken }: { accessToken: string, refreshToken: string } = createTokenPair({ userId: user._id, email: user.email }, publicKey, privateKey)
+
+    // Save the newly token created token into keyTonkenModel
+    await KeyTokenService.createKeyToken({
+      userId: user._id,
+      publicKey,
+      privateKey,
+      refreshToken
+    })
+
+    // Return data to the client
+    return {
+      user: getInfoData({ fields: ['_id', 'username', 'email'], object: user }),
       tokens: {
         accessToken,
         refreshToken

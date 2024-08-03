@@ -1,56 +1,77 @@
+import { getEnvVar } from '@/utils'
 import 'dotenv/config'
 
 interface AppConfig {
-  port: number,
-  buildMode?: string
+  host: string;
+  port: number;
+  buildMode: string;
 }
 
 interface DBConfig {
-  connectString?: string;
-  name?: string;
+  connectString: string;
+  name: string;
 }
 
 interface CloudinaryConfig {
-  cloudName?: string;
-  apiKey?: string;
-  apiSecret?: string;
+  cloudName: string;
+  apiKey: string;
+  apiSecret: string;
+}
+
+interface GoogleOAuth20 {
+  clientId: string;
+  clientSecret: string;
 }
 
 interface Config {
   app: AppConfig;
   db: DBConfig;
+  frontendUrl: string;
   cloudinary: CloudinaryConfig;
+  googleOAuth20: GoogleOAuth20;
 }
 
 const dev: Config = {
   app: {
+    host: getEnvVar('DEV_APP_HOST'),
     port: parseInt(process.env.DEV_APP_PORT ?? '5000', 10),
-    buildMode: process.env.BUILD_MODE
+    buildMode: getEnvVar('BUILD_MODE')
   },
   db: {
-    connectString: process.env.DEV_DB_CONNECT_STRING,
-    name: process.env.DEV_DB_NAME
+    connectString: getEnvVar('DEV_DB_CONNECT_STRING'),
+    name: getEnvVar('DEV_DB_NAME')
   },
+  frontendUrl: getEnvVar('DEV_FRONTEND_URL'),
   cloudinary: {
-    cloudName: process.env.DEV_CLOUDINARY_NAME,
-    apiKey: process.env.DEV_CLOUDINARY_API_KEY,
-    apiSecret: process.env.DEV_CLOUDINARY_API_SECRET
+    cloudName: getEnvVar('DEV_CLOUDINARY_NAME'),
+    apiKey: getEnvVar('DEV_CLOUDINARY_API_KEY'),
+    apiSecret: getEnvVar('DEV_CLOUDINARY_API_SECRET')
+  },
+  googleOAuth20: {
+    clientId: getEnvVar('DEV_GOOGLE_CLIENT_ID'),
+    clientSecret: getEnvVar('DEV_GOOGLE_CLIENT_SECRET')
   }
 }
 
 const product: Config = {
   app: {
+    host: getEnvVar('PRODUCT_APP_HOST'),
     port: parseInt(process.env.PRODUCT_APP_PORT ?? '5000', 10),
-    buildMode: process.env.BUILD_MODE
+    buildMode: getEnvVar('BUILD_MODE')
   },
   db: {
-    connectString: process.env.PRODUCT_DB_CONNECT_STRING,
-    name: process.env.PRODUCT_DB_NAME
+    connectString: getEnvVar('PRODUCT_DB_CONNECT_STRING'),
+    name: getEnvVar('PRODUCT_DB_NAME')
   },
+  frontendUrl: getEnvVar('PRODUCT_FRONTEND_URL'),
   cloudinary: {
-    cloudName: process.env.PRODUCT_CLOUDINARY_NAME,
-    apiKey: process.env.PRODUCT_CLOUDINARY_API_KEY,
-    apiSecret: process.env.PRODUCT_CLOUDINARY_API_SECRET
+    cloudName: getEnvVar('PRODUCT_CLOUDINARY_NAME'),
+    apiKey: getEnvVar('PRODUCT_CLOUDINARY_API_KEY'),
+    apiSecret: getEnvVar('PRODUCT_CLOUDINARY_API_SECRET')
+  },
+  googleOAuth20: {
+    clientId: getEnvVar('PRODUCT_GOOGLE_CLIENT_ID'),
+    clientSecret: getEnvVar('PRODUCT_GOOGLE_CLIENT_SECRET')
   }
 }
 

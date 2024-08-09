@@ -29,6 +29,7 @@ const create = (req: Request, res: Response, next: NextFunction): void => {
     images: Joi.array().items(imageSchema),
     convertionChartImage: imageSchema,
     description: Joi.string().min(120),
+    price: Joi.string(),
     weight: Joi.number(),
     category: Joi.string(),
     attributes: Joi.object(),

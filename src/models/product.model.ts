@@ -23,7 +23,8 @@ const actualClassificationSchema = new Schema({
   faultyGoodsInventory: { type: Number, default: null },
   saftyInventory: { type: Number, default: null },
   initialEntryPrice: { type: Number, default: null },
-  originalSellingPrice: { type: Number, default: null }
+  originalSellingPrice: { type: Number, default: null },
+  status: { type: Boolean, default: true }
 }, {
   _id: false
 })
@@ -37,6 +38,7 @@ const productSchema = new Schema({
   convertionChartImage: imageSchema,
   weight: Number,
   description: String,
+  price: String,
   category: {
     type: String,
     required: true,

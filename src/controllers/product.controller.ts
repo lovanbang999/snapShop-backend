@@ -1,5 +1,5 @@
 import { Ok } from '@/core/success.response'
-import { Response } from 'express'
+import { Request, Response } from 'express'
 import { CusTomRequest } from '@/interfaces/customRequest'
 import { CreateProductType, CreateProductV1Type } from '@/interfaces/product'
 import ProductService from '@/services/product.service'
@@ -14,6 +14,13 @@ class ProductController {
     new Ok({
       message: 'Create new product successfully!',
       metaData: await ProductService.createProduct(data)
+    }).send(res)
+  }
+
+  getGeneralInfoProducts = async (req: Request, res: Response) => {
+    new Ok({
+      message: 'Get general product successfully!',
+      metaData: await ProductService.getGeneralInfoProducts(req.query)
     }).send(res)
   }
 }

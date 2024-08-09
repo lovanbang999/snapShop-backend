@@ -35,7 +35,7 @@ class MediaService {
       streamifier.createReadStream(file.buffer).pipe(uploadStream)
     })
 
-    const uploadResult = [{ url: uploadThumb.url, publicId: uploadThumb.public_id }]
+    const uploadResult = [{ url: uploadThumb.secure_url, publicId: uploadThumb.public_id }]
 
     return uploadResult
   }
@@ -89,7 +89,7 @@ class MediaService {
       streamifier.createReadStream(file.buffer).pipe(uploadStream)
     })
 
-    const uploadResult = [{ url: uploadThumb.url, publicId: uploadThumb.public_id }]
+    const uploadResult = [{ url: uploadThumb.secure_url, publicId: uploadThumb.public_id }]
 
     return uploadResult
   }

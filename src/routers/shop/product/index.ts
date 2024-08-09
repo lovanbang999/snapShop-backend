@@ -10,5 +10,6 @@ productRoutes.use(authentication)
 productRoutes.use(authenticationForShop)
 
 productRoutes.post('/', productValidation.create, asyncHandler(productController.createProduct))
+productRoutes.get('/', asyncHandler(productController.getGeneralInfoProducts))
 
 export default productRoutes

@@ -1,7 +1,7 @@
 import express from 'express'
 import accessRoutes from './access'
-import productRoutes from './product'
-import mediaRoutes from './media'
+import productRoutes from './shop/product'
+import mediaRoutes from './shop/media'
 
 const Routes = express.Router()
 

@@ -19,6 +19,10 @@ export const getInfoData = ({ fields, object }: { fields: string[], object: obje
   return _.pick(object, fields)
 }
 
+export const getSelectData = (select: string[] = []): Record<string, number> => {
+  return Object.fromEntries(select.map(el => [el, 1]))
+}
+
 export const jwtVerification = (token: string, key: string): string | JWT.JwtPayload => {
   try {
     const decode = JWT.verify(token, key as JWT.Secret)

@@ -29,7 +29,6 @@ const actualClassificationSchema = new Schema({
   _id: false
 })
 
-
 // Declare the Schema of the product model
 const productSchema = new Schema({
   name: { type: String, required: true },

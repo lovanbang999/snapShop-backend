@@ -8,6 +8,7 @@ import passport from 'passport'
 import crypto from 'crypto'
 import codeModel from '@/models/code.model'
 import { UserType } from '@/models/user.model'
+import productController from '@/controllers/product.controller'
 
 const accessRoutes = express.Router()
 
@@ -30,6 +31,8 @@ accessRoutes.post('/auth/exchange', asyncHandler(accessController.exchange))
 
 accessRoutes.post('/register', accessValidation.signUp, asyncHandler(accessController.signUp))
 accessRoutes.post('/login', accessValidation.logIn, asyncHandler(accessController.logIn))
+
+accessRoutes.get('/cart/mini', asyncHandler(productController.getCartProduct))
 
 accessRoutes.use(authentication)
 

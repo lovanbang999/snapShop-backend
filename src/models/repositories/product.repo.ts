@@ -1,6 +1,7 @@
 import { ParsedQs } from 'qs'
 import productModel from '../product.model'
-import { FilterQuery } from 'mongoose'
+import { FilterQuery, SortOrder } from 'mongoose'
+import { getSelectData } from '@/utils'
 
 type FilterType = 'active' | 'not-yet-active' | 'violation'
 
@@ -30,4 +31,30 @@ export const getGeneralInfoProducts = (queryParams: ParsedQs) => {
     .select({ name: 1, thumb: 1, shopId: 1, price: 1, createdAt: 1 })
     .sort(sort)
     .lean()
+}
+
+export const getCartProductForUser = async ({
+  limit,
+  sort,
+  page,
+  filter,
+  select
+}: {
+  limit: number,
+  sort: string,
+  page: number,
+  filter: Record<string, any>,
+  select: string[]
+}) => {
+  const skip = (page - 1) * limit
+  const sortBy: Record<string, SortOrder> = sort === 'ctime' ? { _id: -1 } : { _id: 1 }
+
+  const products = await productModel.find(filter)
+    .sort(sortBy)
+    .skip(skip)
+    .limit(limit)
+    .select(getSelectData(select))
+    .lean()
+
+  return products
 }

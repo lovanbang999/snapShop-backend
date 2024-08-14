@@ -9,7 +9,7 @@ interface ParamsSuccess {
 }
 
 // Base class SuccessResponse
-class SuccessResponse {
+export class SuccessResponse {
   message: string
   status: number
   reasonStatusCode: string

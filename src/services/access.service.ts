@@ -188,7 +188,6 @@ class AccessService {
   }
 
   static logout = async ({ user, keyStore }: { user?: UserProps, keyStore?: KeyTokenProps }) => {
-
     if (user?.userId !== keyStore?.userId.toString()) throw new AuthFailureError('There was an authentication error!')
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

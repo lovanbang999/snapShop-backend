@@ -1,12 +1,18 @@
 import { ROLES_USER } from '@/constants'
 import { Document, Schema, model } from 'mongoose'
 
+interface OAuthIdType {
+  google?: string;
+  facebook?: string;
+  x?: string;
+}
+
 export interface UserType extends Document {
   username?: string;
   email: string;
   password?: string;
   avata?: string;
-  googleId?: string;
+  oauthId?: OAuthIdType;
   isActive: boolean;
   roles: string[];
 }
@@ -23,7 +29,11 @@ const userModel = new Schema<UserType>({
     minlength: 6
   },
   avata: { type: String, default: null },
-  googleId: { type: String, unique: true, sparse: true },
+  oauthId: {
+    google: { type: String, unique: true, sparse: true },
+    facebook: { type: String, unique: true, sparse: true },
+    x: { type: String, unique: true, sparse: true }
+  },
   isActive: { type: Boolean, default: false },
   roles: { type: [String], default: [ROLES_USER.USER] }
 }, {

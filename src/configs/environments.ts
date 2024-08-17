@@ -23,12 +23,18 @@ interface GoogleOAuth20 {
   clientSecret: string;
 }
 
+interface FacebookOAuth {
+  clientId: string;
+  clientSecret: string;
+}
+
 interface Config {
   app: AppConfig;
   db: DBConfig;
   frontendUrl: string;
   cloudinary: CloudinaryConfig;
   googleOAuth20: GoogleOAuth20;
+  facebookOAuth: FacebookOAuth;
 }
 
 const dev: Config = {
@@ -50,6 +56,10 @@ const dev: Config = {
   googleOAuth20: {
     clientId: getEnvVar('DEV_GOOGLE_CLIENT_ID'),
     clientSecret: getEnvVar('DEV_GOOGLE_CLIENT_SECRET')
+  },
+  facebookOAuth: {
+    clientId: getEnvVar('DEV_FACEBOOK_CLIENT_ID'),
+    clientSecret: getEnvVar('DEV_FACEBOOK_CLIENT_SECRET')
   }
 }
 
@@ -72,6 +82,10 @@ const product: Config = {
   googleOAuth20: {
     clientId: getEnvVar('PRODUCT_GOOGLE_CLIENT_ID'),
     clientSecret: getEnvVar('PRODUCT_GOOGLE_CLIENT_SECRET')
+  },
+  facebookOAuth: {
+    clientId: getEnvVar('PRODUCT_FACEBOOK_CLIENT_ID'),
+    clientSecret: getEnvVar('PRODUCT_FACEBOOK_CLIENT_SECRET')
   }
 }
 

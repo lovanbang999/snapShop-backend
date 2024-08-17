@@ -1,7 +1,7 @@
 import { NextFunction, Response, Request } from 'express'
 import config from '../configs/environments'
 
-interface CustomError extends Error {
+export interface CustomError extends Error {
   status?: number;
 }
 

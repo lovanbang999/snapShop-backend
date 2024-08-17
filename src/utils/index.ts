@@ -25,7 +25,7 @@ export const getSelectData = (select: string[] = []): Record<string, number> => 
 
 export const jwtVerification = (token: string, key: string): string | JWT.JwtPayload => {
   try {
-    const decode = JWT.verify(token, key as JWT.Secret)
+    const decode = JWT.verify(token, key)
     if (!decode) throw new AuthFailureError('An error occurred during authentication!')
 
     return decode

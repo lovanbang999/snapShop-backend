@@ -7,7 +7,7 @@ import errorHandling from './middlewares/errorHandling.middleware'
 import Routes from './routers/index'
 import { corsOptions } from './configs/cors'
 import passport from 'passport'
-import { googleAuth } from './configs/passport.oauth'
+import { facebookOAuth, googleAuth } from './configs/passport.oauth'
 
 const app = express()
 
@@ -23,6 +23,7 @@ app.use(express.json())
 // Init middleware
 app.use(passport.initialize())
 passport.use(googleAuth)
+passport.use(facebookOAuth)
 
 // Init database
 instanceMongoDB

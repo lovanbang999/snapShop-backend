@@ -24,7 +24,6 @@ const HEADER: HeaderProps = {
 }
 
 export const authentication = asyncHandler( async (req: CusTomRequest, res: Response, next: NextFunction) => {
-
   // Check userId missing?
   const userId = req.headers[HEADER.CLIENT_ID] as string
   if (!userId) throw new AuthFailureError('Invalid request!')
@@ -62,6 +61,7 @@ export const authentication = asyncHandler( async (req: CusTomRequest, res: Resp
   if (!accessToken) throw new AuthFailureError('Something wrong happend! Please relogin')
 
   const decodeUser = jwtVerification(accessToken, publicKey) as UserProps
+
   if (decodeUser.userId as unknown !== userId) throw new AuthFailureError('An error occurred during authentication!')
   req.keyStore = keyStore
   req.user = decodeUser

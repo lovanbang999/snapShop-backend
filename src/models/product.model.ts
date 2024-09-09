@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose'
 import { ImageType } from '@/interfaces/product'
 import slugify from 'slugify'
+import { STATUS } from '@/constants/product.constants'
 
 const DOCUMENT_NAME = 'product'
 const COLLECTION_NAME = 'products'
@@ -37,6 +38,7 @@ const productSchema = new Schema({
   convertionChartImage: imageSchema,
   weight: Number,
   description: String,
+  quantity: { type: Number, required: true },
   price: String,
   category: {
     type: String,
@@ -54,8 +56,11 @@ const productSchema = new Schema({
     set: (value: number) => Math.round(value * 10) / 10
   },
   slug: String,
+  status: { type: String, enum: [STATUS.ACTIVE, STATUS.DEACTIVE, STATUS.DELETED], default: STATUS.ACTIVE, required: true },
   isDraft: { type: Boolean, default: true, index: true, select: false },
-  isPublish: { type: Boolean, default: false, index: true, select: false }
+  isPublish: { type: Boolean, default: false, index: true, select: false },
+  isViolation: { type: Boolean, default: false, index: true, select: false },
+  isDeleted: { type: Boolean, default: false, index: true, select: false }
 }, {
   timestamps: true,
   collection: COLLECTION_NAME

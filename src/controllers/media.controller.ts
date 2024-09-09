@@ -9,7 +9,7 @@ class MediaController {
     const { file, user } = req
     if (!file) throw new BadRequestError('Not receive file!')
 
-    const shopId = user?.userId
+    const shopId = user.userId
     if (!shopId) throw new BadRequestError('Invalid request!')
 
     new Ok({
@@ -23,7 +23,7 @@ class MediaController {
 
     if (!files) throw new BadRequestError('Not receive file!')
 
-    const shopId = user?.userId
+    const shopId = user.userId
     if (!shopId) throw new BadRequestError('Invalid request!')
 
     const filesConvertType = files as Express.Multer.File[]
@@ -38,7 +38,7 @@ class MediaController {
     const { file, user } = req
     if (!file) throw new BadRequestError('Not receive file!')
 
-    const shopId = user?.userId
+    const shopId = user.userId
     if (!shopId) throw new BadRequestError('Invalid request!')
 
     new Ok({
@@ -52,7 +52,7 @@ class MediaController {
 
     if (!files) throw new BadRequestError('Not receive file!')
 
-    const shopId = user?.userId
+    const shopId = user.userId
     if (!shopId) throw new BadRequestError('Invalid request!')
 
     const filesConvertType = files as Express.Multer.File[]

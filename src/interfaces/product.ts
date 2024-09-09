@@ -65,7 +65,7 @@ export interface ActualClassificationType {
   color?: string ;
   image?: ImageType;
   barcode?: string;
-  normalGoodsInventory?: number;
+  normalGoodsInventory: number;
   faultyGoodsInventory?: number,
   saftyInventory?: number,
   initialEntryPrice?: number,

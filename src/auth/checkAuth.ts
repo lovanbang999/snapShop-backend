@@ -70,7 +70,7 @@ export const authentication = asyncHandler( async (req: CusTomRequest, res: Resp
 } )
 
 export const authenticationForShop = asyncHandler( async (req: CusTomRequest, res: Response, next: NextFunction) => {
-  if (!req.user?.userId) throw new ForbiddenError('Forbidden error!')
+  if (!req.user.userId) throw new ForbiddenError('Forbidden error!')
 
   const foundUser = await userModel.findById(req.user.userId).lean()
   if (!foundUser) throw new ForbiddenError('Forbidden error!')

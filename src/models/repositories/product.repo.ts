@@ -1,19 +1,41 @@
 import { ParsedQs } from 'qs'
 import productModel from '../product.model'
 import { FilterQuery, SortOrder } from 'mongoose'
-import { getSelectData } from '@/utils'
+import { convertToObjectIdMongodb, getSelectData } from '@/utils'
 
-type FilterType = 'active' | 'not-yet-active' | 'violation'
+type FilterType = 'all' | 'active' | 'deactive' | 'violation'
+
+interface GetGeneralInfoProducts {
+  userId: string,
+  type?: string,
+  current?: number,
+  limit?: number,
+  queryParams: ParsedQs
+}
 
 const filterList: Record<FilterType, FilterQuery<any>> = {
+  all: {
+    $or: [
+      { isPublish: true, isDraft: false, isViolation: false },
+      { isPublish: false, isDraft: true, isViolation: false },
+      { isPublish: false, isDraft: false, isViolation: true }
+    ]
+  },
   active: { isPublish: true, isDraft: false },
-  'not-yet-active': { isPublish: false, isDraft: true },
+  deactive: { isPublish: false, isDraft: true },
   violation: { isViolation: true }
 }
 
-export const getGeneralInfoProducts = (queryParams: ParsedQs) => {
+export const getGeneralInfoProducts = async ({
+  userId,
+  type = 'all',
+  current = 1,
+  limit = 5,
+  queryParams
+}: GetGeneralInfoProducts) => {
   // Set filter based on type
-  const filter = filterList[queryParams.type as FilterType]
+  const filter = filterList[type as FilterType]
+  const filterBy = { shopId: convertToObjectIdMongodb(userId), ...filter }
 
   const sort: Record<string, 1 | -1> = {}
 
@@ -27,10 +49,18 @@ export const getGeneralInfoProducts = (queryParams: ParsedQs) => {
     sort.price = queryParams.price === 'desc' ? -1 : 1
   }
 
-  return productModel.find(filter)
-    .select({ name: 1, thumb: 1, shopId: 1, price: 1, createdAt: 1 })
+  const totalProducts = await productModel.countDocuments(filterBy).lean()
+  const totalPages = Math.ceil(totalProducts / limit)
+  const skip = (current - 1) * limit
+
+  const result = await productModel.find(filterBy)
+    .select({ name: 1, thumb: 1, category: 1, price: 1, quantity: 1, status: 1, createdAt: 1 })
+    .limit(limit)
+    .skip(skip)
     .sort(sort)
     .lean()
+
+  return { result, totalPages, currentPage: current }
 }
 
 export const getCartProductForUser = async ({

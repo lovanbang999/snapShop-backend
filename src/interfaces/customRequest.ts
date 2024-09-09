@@ -8,7 +8,7 @@ export interface UserProps {
 
 export interface CusTomRequest extends Request {
   keyStore?: KeyTokenProps;
-  user?: UserProps;
+  user: UserProps;
   refreshToken?: string;
 }
 

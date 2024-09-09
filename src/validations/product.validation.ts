@@ -24,7 +24,7 @@ const create = (req: Request, res: Response, next: NextFunction): void => {
   })
 
   const correctCondition = Joi.object({
-    name: Joi.string().min(3).max(80),
+    name: Joi.string().min(15),
     thumb: imageSchema,
     images: Joi.array().items(imageSchema),
     convertionChartImage: imageSchema,

@@ -24,15 +24,21 @@ const create = (req: Request, res: Response, next: NextFunction): void => {
   })
 
   const correctCondition = Joi.object({
-    name: Joi.string().min(15),
-    thumb: imageSchema,
+    name: Joi.string().min(15).required(),
+    thumb: imageSchema.required(),
     images: Joi.array().items(imageSchema),
-    convertionChartImage: imageSchema,
     description: Joi.string().min(120),
-    price: Joi.string(),
-    weight: Joi.number(),
-    category: Joi.string(),
-    attributes: Joi.object(),
+    price: Joi.number().required(),
+    weight: Joi.object({
+      type: Joi.string(),
+      value: Joi.number()
+    }),
+    height: Joi.number(),
+    width: Joi.number(),
+    length: Joi.number(),
+    category: Joi.string().required(),
+    quantity: Joi.number().required(),
+    sku: Joi.string().allow('').optional(),
     actualClassification: Joi.array().items(actualClassificationSchema)
   })
 

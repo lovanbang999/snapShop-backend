@@ -30,13 +30,23 @@ const actualClassificationSchema = new Schema({
   _id: false
 })
 
+const weightSchema = new Schema({
+  type: { type: String, enum: ['grams', 'kilograms'] },
+  value: Number
+}, {
+  _id: false
+})
+
 // Declare the Schema of the product model
 const productSchema = new Schema({
   name: { type: String, required: true },
   thumb: imageSchema,
   images: [imageSchema],
-  convertionChartImage: imageSchema,
-  weight: Number,
+  weight: weightSchema,
+  height: Number,
+  width:  Number,
+  length: Number,
+  sku: String,
   description: String,
   quantity: { type: Number, required: true },
   price: String,
